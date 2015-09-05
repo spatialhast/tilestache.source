@@ -6,11 +6,10 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-
   <title>TileStache Source</title>
   
-  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.4/leaflet.css" />
- 
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.css" />
+
   <style>
     body {
       padding: 0;
@@ -20,10 +19,9 @@
       height: 100%;
       width: 100%;
     }
-	
   </style> 
   
-	<script src="http://cdn.leafletjs.com/leaflet-0.7.4/leaflet.js"></script>
+  <script src="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.js"></script>
 
 </head>
 
@@ -33,23 +31,62 @@
   
   <script>
 
-		var map = L.map('map').setView([49.8413,24.0306], 13);
-	
-	
-		//var layerOSM = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {		}).addTo(map);		
-		var layerTileStacheOSM = L.tileLayer('http://134.249.136.27:8080/osm/{z}/{x}/{y}.png', {		}).addTo(map);
+
+      var host = 'http://134.249.136.27/tscache';
+
+      // Base Layers
+      var layerOSM = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; Map Data <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      });
+
+      var layerTSOSM = L.tileLayer(host + '/osm/{z}/{x}/{y}.png', {
+        attribution: '&copy; Map Data <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      });
+
+      var layerTSBuildings = L.tileLayer(host + '/lvivbuildings_png/{z}/{x}/{y}.png', {
+        attribution: '&copy; Map Data <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      });
 
 
+      var map = L.map('map', {
+        center: [49.8357, 24.0262],
+        zoom: 13,
+        layers: [layerOSM]
+      });
 
-		
-		
-		
-		
-		
-		
-		
-		
-  </script>
+
+      var baseMaps = {
+        "OpenStreetMap": layerOSM,
+        "OSM Cache": layerTSOSM,
+        "OSM Buildings": layerTSBuildings
+      };
+
+      L.control.layers(baseMaps, null, {collapsed: false}).addTo(map);
+
+
+/*
+// Get MapZoom an MapCenter: map.setView([49.8376, 23.9761], 13);   
+map.on('moveend ', function(e) {   
+console.log("map.setView([" + map.getCenter().lat.toFixed(4) + ", " + map.getCenter().lng.toFixed(4) + "], " + map.getZoom() + ");");   
+});    
+*/
+
+/*
+// Get MapBounds: [[49.7405,23.6858],[49.9550,24.3450]]
+map.on('moveend ', function(e) {
+console.log("[[" + map.getBounds()._southWest.lat.toFixed(4) + "," + map.getBounds()._southWest.lng.toFixed(4) + "],[" + map.getBounds()._northEast.lat.toFixed(4) + "," + map.getBounds()._northEast.lng.toFixed(4) + "]]");
+});
+*/
+
+
+</script>
+
+
+<script>
+  document.write('<script src="http://' + (location.host || 'localhost')
+    .split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')
+</script>
+
 </body>
 </html>
 
